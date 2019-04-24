@@ -1,0 +1,159 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>GeoJSONLayer - 4.11</title>
+
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.11/esri/themes/light/main.css"
+    />
+    <script src="https://js.arcgis.com/4.11/"></script>
+
+    <script>
+      require([
+        "esri/Map",
+        "esri/layers/GeoJSONLayer",
+        "esri/views/MapView",
+        "esri/widgets/Legend"
+      ], function(Map, GeoJSONLayer, MapView,Legend) {
+      
+      
+      
+      var less35 = {
+      	 type: "simple-fill", 
+          color: "#CAFF70",
+          style: "solid",
+          outline: {
+            width: 0.2,
+            color: [255, 255, 255, 0.5]
+          }
+      };
+      var less50 = {
+      	  type: "simple-fill", 
+          color: "#C0FF3E",
+          style: "solid",
+          outline: {
+            width: 0.2,
+            color: [255, 255, 255, 0.5]
+          }
+      };
+      
+       var  more50 = {
+          type: "simple-fill", 
+          color: "#7FFF00",
+          style: "solid",
+          outline: {
+            width: 0.2,
+            color: [255, 255, 255, 0.5]
+          }
+        };
+
+        var  more75 = {
+          type: "simple-fill", 
+          color: "#00FF00",
+          style: "solid",
+          outline: {
+            width: 0.2,
+            color: [255, 255, 255, 0.5]
+          }
+        };
+      
+      var renderer = {
+      	type:"class-breaks",
+      	 field: "pop2000",
+      	 
+      	  defaultSymbol: {
+            type: "simple-fill", // autocasts as new SimpleFillSymbol()
+            color: "black",
+            style: "backward-diagonal",
+            outline: {
+              width: 0.5,
+              color: [50, 50, 50, 0.6]
+            }
+          },
+           defaultLabel: "no data",
+          classBreakInfos: [
+            {
+              minValue: 0,
+              maxValue: 10000000,
+              symbol: less35,
+              label: "< 35%"
+            },
+            {
+              minValue: 10000000,
+              maxValue: 30000000,
+              symbol: less50,
+              label: "35 - 50%"
+            },
+            {
+              minValue: 30000000,
+              maxValue: 45000000,
+              symbol: more50,
+              label: "50 - 75%"
+            },
+            {
+              minValue: 45000000,
+              maxValue: 100000000,
+              symbol: more75,
+              label: "> 75%"
+            }
+          ]
+       
+      };
+      
+      
+      
+      
+        var  url = "https://baizhixy.github.io/map/chinawgs84.json";
+
+        var geojsonLayer = new GeoJSONLayer({
+          url: url,
+          title:"GDP class-breaks Renderer",
+           renderer: renderer,
+        });
+
+        var map = new Map({
+          basemap: "gray",
+          layers: [geojsonLayer]
+        });
+
+        var view = new MapView({
+          container: "viewDiv",
+          center: [-168, 46],
+          zoom: 3,
+          map: map
+        });
+        
+        
+        var legend = new Legend({
+          view: view
+        });
+
+        view.ui.add(legend, "bottom-left");
+        
+        
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="viewDiv"></div>
+  </body>
+</html>

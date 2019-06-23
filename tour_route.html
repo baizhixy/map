@@ -1,0 +1,192 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<style type="text/css">
+body,
+html,
+#allmap {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	left: 0px;
+}
+#allword {
+	position: absolute;
+	width: 30%;
+	height: 100%;
+	background-color: ghostwhite;
+	right: 0px;
+}
+
+.dayway {
+	width: 25%;
+	height: 30%;
+	position: absolute;
+	top: 50px;
+	right: 10px;
+}
+
+#day-result {
+	width: 30%;
+	height: 30%;
+	position: absolute;
+	top: 20px;
+	right: 0px;
+}
+input{
+	background-color: yellow;
+	height: 30px;
+	width: 80px;
+}
+</style>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=hOLs2msaldsRHNSTSTZIVFSHf89yuZ6r"></script>
+<title>武汉5日游经典路线</title>
+</head>
+
+
+
+<body>
+<div id="allmap"></div>
+<div id="allword"></div>
+<div id="day-result">
+		<input type="button" onclick="add_day1();" value="Day1" />
+		<input type="button" onclick="add_day2();" value="Day2" />
+		<input type="button" onclick="add_day3();" value="Day3" />
+		<input type="button" onclick="add_day4();" value="Day4" />
+		<input type="button" onclick="add_day5();" value="Day5" />
+</div>
+<div class="dayway">
+		<p>D1:  晴川阁(1小时) → 归元禅寺(1小时) → 汉阳造艺术区(1小时) → 江汉路步行街(2小时) → 武昌江滩(1小时) → 武汉长江大桥(30分钟) → 户部巷小吃一条街(1.5小时)</p>
+	    <p>D2:  湖北省博物馆(2小时) → 武汉大学(2小时) → 东湖生态旅游风景区(3小时) → 世界城光谷步行街(2小时)</p>
+	    <p>D3:  汉口江滩(1小时) → 古德寺(1小时) → 武汉美术馆(1小时) → 江汉关博物馆(1小时) → 黎黄陂路街头博物馆(1小时) → 知音号(2小时)</p>
+		<p>D4:  黄鹤楼(1小时) → 辛亥革命博物馆(1小时) → 武昌起义军政府旧址(1小时) → 昙华林(2小时) → 楚河汉街(2小时)</p>
+		<p>D5:  湖北省美术馆(1小时) → 东湖听涛景区(1小时)</p>
+</div>
+
+</body>
+</html>
+<script type="text/javascript">
+
+// 百度地图API功能
+var map = new BMap.Map("allmap");
+map.enableScrollWheelZoom(true);
+//默认第5天路线
+var l1 = new BMap.Point(114.371879,30.567828);
+var l2 = new BMap.Point(114.381692,30.573998);
+
+var driving5 = new BMap.DrivingRoute(map, {renderOptions:{map: map, autoViewport: true}});
+driving5.search(l1, l2,{waypoints:[]});//waypoints表示途经点
+
+var myIcon = new BMap.Icon("http://lbsyun.baidu.com/jsdemo/img/fox.gif", new BMap.Size(300,157));
+var marker = new BMap.Marker(l1,{icon:myIcon});
+map.addOverlay(marker); 
+var marker1 = new BMap.Marker(l2,{icon:myIcon});
+map.addOverlay(marker1);
+
+function add_day1(){
+		map.clearOverlays(); //清除地图上所有覆盖物
+		var p1 = new BMap.Point(114.291314,30.561284);
+var p2 = new BMap.Point(114.265693,30.551579);
+var p3 = new BMap.Point(114.274014,30.561859);
+var p4 = new BMap.Point(114.301037,30.584163);
+var p5 = new BMap.Point(114.308665,30.564553);
+var p6 = new BMap.Point(114.294873,30.555432);
+var p7 = new BMap.Point(114.304989,30.553649);
+
+var driving = new BMap.DrivingRoute(map, {renderOptions:{map: map, autoViewport: true}});
+driving.search(p1, p7,{waypoints:[p2,p3,p4,p5,p6]});//waypoints表示途经点
+var myIcon = new BMap.Icon("http://lbsyun.baidu.com/jsdemo/img/fox.gif", new BMap.Size(300,157));
+var marker = new BMap.Marker(p1,{icon:myIcon});
+map.addOverlay(marker);     
+marker.setAnimation(BMAP_ANIMATION_BOUNCE);
+var marker2 = new BMap.Marker(p2);
+map.addOverlay(marker2);     
+marker2.setAnimation(BMAP_ANIMATION_BOUNCE);
+var marker3 = new BMap.Marker(p3);
+map.addOverlay(marker3);     
+marker3.setAnimation(BMAP_ANIMATION_BOUNCE);
+
+var marker4 = new BMap.Marker(p4);
+map.addOverlay(marker4);     
+marker4.setAnimation(BMAP_ANIMATION_BOUNCE);
+var marker5 = new BMap.Marker(p5);
+map.addOverlay(marker5);     
+marker5.setAnimation(BMAP_ANIMATION_BOUNCE);
+var marker6 = new BMap.Marker(p6);
+map.addOverlay(marker6);     
+marker6.setAnimation(BMAP_ANIMATION_BOUNCE);
+var marker7 = new BMap.Marker(p7,{icon:myIcon});
+map.addOverlay(marker7);     
+marker7.setAnimation(BMAP_ANIMATION_BOUNCE);
+};
+function add_day2(){
+		map.clearOverlays(); //清除地图上所有覆盖物
+//第2天路线
+var t1 = new BMap.Point(114.371879,30.567828);
+var t2 = new BMap.Point(114.371605,30.544165);
+var t3 = new BMap.Point(114.420005,30.557869);
+var t4 = new BMap.Point(114.408425,30.511176);
+
+var driving2 = new BMap.DrivingRoute(map, {renderOptions:{map: map, autoViewport: true}});
+driving2.search(t1, t4,{waypoints:[t2,t3]});//waypoints表示途经点
+
+var myIcon = new BMap.Icon("http://lbsyun.baidu.com/jsdemo/img/fox.gif", new BMap.Size(300,157));
+var marker = new BMap.Marker(t1,{icon:myIcon});
+map.addOverlay(marker); 
+var marker1 = new BMap.Marker(t4,{icon:myIcon});
+map.addOverlay(marker1); 
+};
+function add_day3(){
+		map.clearOverlays(); //清除地图上所有覆盖物
+//第三天路线
+var s1 = new BMap.Point(114.324321,30.613846);
+var s2 = new BMap.Point(114.314118,30.624312);
+var s3 = new BMap.Point(114.299543,30.58978);
+var s4 = new BMap.Point(114.30403,30.581695);
+var s5 = new BMap.Point(114.308826,30.592207);
+var s6 = new BMap.Point(114.318715,30.601586);
+
+var driving3 = new BMap.DrivingRoute(map, {renderOptions:{map: map, autoViewport: true}});
+driving3.search(s1, s6,{waypoints:[s2,s3,s4,s5]});//waypoints表示途经点
+
+var myIcon = new BMap.Icon("http://lbsyun.baidu.com/jsdemo/img/fox.gif", new BMap.Size(300,157));
+var marker = new BMap.Marker(s1,{icon:myIcon});
+map.addOverlay(marker); 
+var marker1 = new BMap.Marker(s6,{icon:myIcon});
+map.addOverlay(marker1); 
+};
+function add_day4(){
+		map.clearOverlays(); //清除地图上所有覆盖物
+//第4天路线
+var w1 = new BMap.Point(114.309043,30.550317);
+var w2 = new BMap.Point(114.312357,30.542703);
+var w3 = new BMap.Point(114.312797,30.547593);
+var w4 = new BMap.Point(114.315529,30.55803);
+var w5 = new BMap.Point(114.34713,30.560857);
+
+var driving4 = new BMap.DrivingRoute(map, {renderOptions:{map: map, autoViewport: true}});
+driving4.search(w1, w5,{waypoints:[w2,w3,w4]});//waypoints表示途经点
+
+var myIcon = new BMap.Icon("http://lbsyun.baidu.com/jsdemo/img/fox.gif", new BMap.Size(300,157));
+var marker = new BMap.Marker(w1,{icon:myIcon});
+map.addOverlay(marker); 
+var marker1 = new BMap.Marker(w5,{icon:myIcon});
+map.addOverlay(marker1); 
+};
+function add_day5(){
+		map.clearOverlays(); //清除地图上所有覆盖物
+//第5天路线
+var l1 = new BMap.Point(114.371879,30.567828);
+var l2 = new BMap.Point(114.381692,30.573998);
+
+var driving5 = new BMap.DrivingRoute(map, {renderOptions:{map: map, autoViewport: true}});
+driving5.search(l1, l2,{waypoints:[]});//waypoints表示途经点
+
+var myIcon = new BMap.Icon("http://lbsyun.baidu.com/jsdemo/img/fox.gif", new BMap.Size(300,157));
+var marker = new BMap.Marker(l1,{icon:myIcon});
+map.addOverlay(marker); 
+var marker1 = new BMap.Marker(l2,{icon:myIcon});
+map.addOverlay(marker1); 
+};
+</script>

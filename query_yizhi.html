@@ -1,0 +1,185 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>遗址点查询</title>
+    <style>
+      html,
+      body {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+      }
+
+      #viewDiv {
+        position: absolute;
+     width:100%;
+        height: 100%;
+      }
+
+      #panel {
+        position: absolute;
+        right: 0;
+        height: 100%;
+        width: 40%;
+        overflow: scroll;
+      }
+         #num-0 {
+        color: #99CC00;
+        font-size: 36pt;
+        font-weight: bolder;
+        line-height: 0.8;
+      }
+    </style>
+
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.11/esri/themes/light/main.css"
+    />
+    <script src="https://js.arcgis.com/4.11/"></script>
+
+    <script>
+  require([
+        "esri/views/MapView",
+        "esri/WebMap",
+        "esri/widgets/Legend",
+        "esri/widgets/Expand",
+        "esri/widgets/Bookmarks",
+        "esri/core/lang",
+        "esri/core/promiseUtils",
+        "esri/core/watchUtils"
+      ], function(
+        MapView,
+        WebMap,
+        Legend,
+        Expand,
+        Bookmarks,
+        lang,
+        promiseUtils,
+        watchUtils
+      ) {
+        const webmap = new WebMap({
+          portalItem: {
+            id: "8f1e99002ec446138774d5147c6ca7a3"
+          }
+        });
+        const view = new MapView({
+          map: webmap,
+          container: "viewDiv",
+          center: [114.33, 30.58], 
+		      zoom: 13
+        });
+
+        ////////////////////
+      const titleContent = document.createElement("div");
+        titleContent.style.padding = "15px";
+        titleContent.style.backgroundColor = "white";
+        titleContent.style.width = "180px";
+        titleContent.innerHTML = [
+          "<div id='title' class='esri-widget'>",
+         "共有遗址点<span id='num-0'>0</span> 处；",
+          "</div>"
+        ].join(" ");
+        view.ui.add(titleContent, "top-right");
+        
+     ////////////////
+//显示选择范围
+
+        let highlightHandle = null;
+//////////////
+        view.when().then(function() {
+          createCharts();
+          const layer = webmap.layers.getItemAt(0);   
+          view.whenLayerView(layer).then(function(layerView) {
+            watchUtils.whenFalseOnce(layerView, "updating", function(val) {
+              view.on(["click", "drag"], function(event) {
+                event.stopPropagation();
+                queryStatsOnDrag(layerView, event).then(updateCharts);
+              });
+            });
+          });
+        });
+        function queryStatsOnDrag(layerView, event) {
+        	
+          const query = layerView.layer.createQuery();
+          query.geometry = view.toMap(event); 
+          query.distance = 1; 
+          query.units = "miles";
+
+          const statsQuery = query.clone();
+
+          const statDefinitions = [
+
+         //数字
+            {
+              onStatisticField:   "1",
+              outStatisticFieldName: "Id",
+              statisticType: "count"
+            }
+          ];
+
+          statsQuery.outStatistics = statDefinitions;
+
+          const allStatsResponse = layerView.queryFeatures(statsQuery).then(
+            function(response) {
+              const stats = response.features[0].attributes;
+              
+              return stats;
+            },
+            function(e) {
+              console.error(e);
+            }
+          );
+
+          const openStatsQuery = statsQuery.clone();
+          const unsolvedStatsResponse = layerView
+            .queryFeatures(openStatsQuery)
+            .then(
+              function(response) {
+                const stats = response.features[1].attributes;
+              
+              return stats;
+              },
+              function(e) {
+                console.error(e);
+              }
+            );
+
+          //范围框设置
+          layerView.queryObjectIds(query).then(function(ids) {
+            if (highlightHandle) {
+              highlightHandle.remove();
+              highlightHandle = null;
+            }
+            highlightHandle = layerView.highlight(ids);
+          });
+          return promiseUtils.eachAlways([
+            allStatsResponse,
+            unsolvedStatsResponse
+          ]);
+        }
+        function updateCharts(responses) {
+          const allStats = responses[0].value;
+             
+          totalNumber.innerHTML = allStats.Id;
+        }
+
+        function createCharts() {
+          totalNumber = document.getElementById("num-0");
+        }
+        //////////////
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="viewDiv"></div>
+  </body>
+</html>

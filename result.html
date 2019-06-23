@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<!--<meta charset="utf-8" />-->
+		<meta http-equiv="Content-Type" Content="text/html; charset=utf8"/>
+		<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>武汉国家级省级历史遗迹</title>
+
+		<style>
+			html,
+			body,
+			#viewDiv {
+				padding: 0;
+				margin: 0;
+				height: 100%;
+				width: 100%;
+			}
+			
+			#mapSwitch {
+				height: 80px;
+				width: 100px;
+				background: url(底图1.png) center center;
+				border: 1.5px solid rgb(255, 255, 255);
+				position: absolute;
+				z-index: 1;
+				border-radius: 5px;
+				top: 70px;
+				right: 0;
+				cursor: pointer;
+			}
+			
+			#mapSwitch1 {
+				height: 80px;
+				width: 100px;
+				background: url(底图2.png) center center;
+				border: 1.5px solid rgb(255, 255, 255);
+				position: absolute;
+				z-index: 1;
+				border-radius: 5px;
+				top: 140px;
+				right: 0;
+				cursor: pointer;
+			}
+			
+			a {
+				text-decoration: none;
+				color: black;
+				background-color:#CCFFFF;
+				border: 2px solid deepskyblue;
+			}
+			
+			a:hover {
+				color: red;
+			}
+			
+			#id_div {
+				z-index: 1;
+				position: absolute;
+				height: 60px;
+				width: 300px;
+				top: 70px;
+				left: 50px;
+				text-align: center;
+				cursor: pointer;
+			}
+			
+      .sassy-theme .esri-widget,
+      .sassy-theme .esri-widget a {
+        background-color: #F0F8FF;
+        color: black;
+      }
+      .layerToggle0{
+      	 top: 65%;
+            right: 0px;
+            position: absolute;
+            width: 100px;
+            height: 20px;
+            z-index: 99;
+            background-color: #87CEFA;
+            border-radius: 6px;
+            padding: 10px;
+            opacity: 0.5;
+      }
+      .layerToggle1{
+      	 top: 70%;
+            right: 0px;
+            position: absolute;
+            width: 100px;
+            height: 20px;
+            z-index: 99;
+            background-color: #87CEFA;
+            border-radius: 6px;
+            padding: 10px;
+            opacity: 0.5;
+      }
+      .layerToggle2{
+      	 top: 75%;
+            right: 0px;
+            position: absolute;
+            width: 100px;
+            height: 20px;
+            z-index: 99;
+            background-color: #87CEFA;
+            border-radius: 6px;
+            padding: 10px;
+            opacity: 0.5;
+      }
+      .layerToggle3{
+      	 top: 80%;
+            right: 0px;
+            position: absolute;
+            width: 100px;
+            height: 20px;
+            z-index: 99;
+            background-color: #87CEFA;
+            border-radius: 6px;
+            padding: 10px;
+            opacity: 0.5;
+      }
+      .layerToggle4{
+      	 top: 85%;
+            right: 0px;
+            position: absolute;
+            width: 100px;
+            height: 20px;
+            z-index: 99;
+            background-color: #87CEFA;
+            border-radius: 6px;
+            padding: 10px;
+            opacity: 0.5;
+      }
+      #infoDiv {
+            background-color: white;
+            color: black;
+            top:0%;
+            left: 80px;
+            position: absolute;
+            background-color: #F0F8FF;
+            padding: 6px;
+            width: 400px;
+        }
+ 
+        #results {
+            font-weight: bolder;
+        }
+
+        #num-0 {
+        color: #99CC00;
+        font-size: 36pt;
+        font-weight: bolder;
+        line-height: 0.8;
+      }
+ 
+
+
+
+		</style>
+
+		<link rel="stylesheet" href="https://js.arcgis.com/4.11/esri/themes/light/main.css" />
+		<script src="https://js.arcgis.com/4.11/"></script>
+
+		<script>require([ 
+			"esri/Map",
+			"esri/views/SceneView",
+			"esri/geometry/Point", 
+			"esri/widgets/Search",
+			"esri/widgets/Legend",
+		    "esri/layers/FeatureLayer",
+			"esri/layers/GeoJSONLayer",
+			"esri/layers/GraphicsLayer",
+            "esri/geometry/geometryEngine",
+            "esri/Graphic",       
+            "esri/widgets/Expand",
+             "esri/tasks/support/Query",
+             "esri/tasks/QueryTask"
+			], function(
+				Map, 
+				SceneView,
+				Point, 
+				Search, 
+				Legend,
+				FeatureLayer,
+				GeoJSONLayer,
+				GraphicsLayer,
+                geometryEngine,
+                Graphic,
+                Expand,
+                Query,
+                QueryTask
+			) {
+
+
+	var featurelayer = new FeatureLayer({
+		portalItem: {
+				id: "327cbcc53e3147878722b420948fea70"
+			},
+			title: "武汉历史文化遗址",
+			outFields: ["*"],
+				popupTemplate: {
+			//弹出内容框
+			title: "{Name}", content: [ {
+				type: "text", 
+				text: "{Caption}"
+			}
+			, {
+				type: "media", 
+				mediaInfos: [ {
+					type: "image", value: {
+						sourceURL: "{URL}"
+					}
+				}
+				]
+			}
+			]
+		}
+	});
+	var wellsLayer = new FeatureLayer({
+		 	 portalItem: {
+                    id: "327cbcc53e3147878722b420948fea70"
+                  },
+                    outFields: ["*"]
+	});
+	var sty0= {
+		type: "simple-marker",
+		color: "#99CC00", 
+		width: "0.5px", 
+		style: "solid"
+	};
+	
+	var sty1= {
+		type: "simple-marker",
+		color: "#ff6207", 
+		width: "0.5px", 
+		style: "solid"
+	};
+	var sty2= {
+		type: "simple-marker", 
+		color: "#FFcccc",
+		width: "0.5px",
+		style: "solid"
+	};
+	var sty3= {
+		type: "simple-marker", 
+		color: "#FFFF66", 
+		width: "0.5px", 
+		style: "solid"
+	};
+	var sty4= {
+		type: "simple-marker", 
+		color: "#ef37ac", 
+		width: "0.5px", 
+		style: "solid"
+	};
+	featurelayer.renderer= {
+		type: "unique-value", 
+		field: "Id", 
+		legendOptions: {
+		
+		title: "遗址类型"
+		},
+		uniqueValueInfos: [ {
+			value: "0", 
+			symbol: sty0,
+			label: "古建筑"
+		}, 
+		{
+			value: "1", 
+			symbol: sty1, 
+			label: "古墓葬"
+		}, 
+		{
+			value: "2", 
+			symbol: sty2,
+			label: "古文化遗址"
+		}, 
+		{
+			value: "4", 
+			symbol: sty4, 
+			label: "石窟石刻"
+		}, 
+		{
+			value: "3", 
+			symbol: sty3, 
+			label: "近现代史迹及代表性建筑"}]
+};
+
+var river = new GeoJSONLayer({
+	url: "https://baizhixy.github.io/map/rivers.json",
+	id: "rivers_id",
+	visible: false
+});
+var lakes = new GeoJSONLayer({
+	url: "https://baizhixy.github.io/map/lakes.json",
+	id: "lakes_id",
+	visible: false
+});
+var road = new GeoJSONLayer({
+	url: "https://baizhixy.github.io/map/road.json",
+	id: "road_id",
+	visible: false
+});
+var jumindi = new GeoJSONLayer({
+	url: "https://baizhixy.github.io/map/jumindi.json",
+	id: "jumindi_id",
+	visible: false
+});
+var boundary = new GeoJSONLayer({
+	url: "https://baizhixy.github.io/map/boundary.json",
+	id: "boundary_id",
+	visible: false
+});
+
+
+var ditu ="streets";
+	var map=new Map( {
+		basemap: ditu,
+		layers: [wellsLayer,featurelayer]
+	});
+	  map.add(river);
+      map.add(lakes);
+      map.add(road);
+      map.add(jumindi);
+      map.add(boundary);
+
+      
+	var view=new SceneView( {
+		container: "viewDiv", 
+		center: [114.33, 30.58], 
+		zoom: 13, 
+		map: map
+	});
+	
+	//高亮显示
+	var highlight;
+	view.on("pointer-move", function(event) {
+		view.hitTest(event).then(function(response) {
+			if(response.results.length) {
+				var graphic=response.results.filter(function(result) {
+					return result.graphic.layer===featurelayer;
+				}
+				)[0].graphic;
+				view.whenLayerView(graphic.layer).then(function(layerView) {
+					if(highlight) {
+						highlight.remove();
+					}
+					;
+					highlight=layerView.highlight(graphic);
+					;
+				}
+				);
+			}
+		}
+		);
+	}
+	);
+	//切换底图
+	document.getElementById("mapSwitch").addEventListener("click", function() {
+		alert("是否切换底图");
+		ditu="gray";
+		map.basemap=ditu;
+	}
+	);
+	document.getElementById("mapSwitch1").addEventListener("click", function() {
+		alert("是否切换底图");
+		ditu="satellite";
+		map.basemap=ditu;
+	}
+	);
+	//搜索框
+	var searchWidget=new Search( {
+		view: view
+	}
+	);
+	view.ui.add(searchWidget, {
+		position: "top-right"
+	}
+	);
+	view.ui.add( new Legend( {
+		view: view
+	}
+	), "bottom-left");
+	//经纬度、缩放、缩放级别
+	var coordsWidget=document.createElement("div");
+	coordsWidget.id="coordsWidget";
+	coordsWidget.className="esri-widget esri-component";
+	coordsWidget.style.padding="7px 15px 5px";
+	view.ui.add(coordsWidget, "bottom-right");
+	function showCoordinates(pt) {
+		var coords="Lat/Lon " + pt.latitude.toFixed(3) + " " + pt.longitude.toFixed(3) + " | Scale 1:" + Math.round(view.scale * 1) / 1 + " | Zoom " + view.zoom;
+		coordsWidget.innerHTML=coords;
+	}
+	view.watch("stationary", function(isStationary) {
+		showCoordinates(view.center);
+	}
+	);
+	view.on("pointer-move", function(evt) {
+		showCoordinates(view.toMap( {
+			x: evt.x, y: evt.y
+		}
+		));
+	}
+	);
+	////////////////////////
+	       //切换图层
+            view.on("layerview-create", function(event) {
+          if (event.layer.id === "rivers_id") {
+            console.log("LayerView for male rivers created!", event.layerView);
+          }
+          if (event.layer.id === "lakes_id") {
+            console.log("LayerView for lakes created!", event.layerView);
+          }
+          if (event.layer.id === "road_id") {
+            console.log("LayerView for road created!", event.layerView);
+          }
+          if (event.layer.id === "jumindi_id") {
+            console.log("LayerView for jumindi created!", event.layerView);
+          }
+          if (event.layer.id === "boundary_id") {
+            console.log("LayerView for boundary created!", event.layerView);
+          }
+        });
+        
+
+        var riversToggle = document.getElementById("riversLayer");
+        riversToggle.addEventListener("change", function () {
+          river.visible = riversToggle.checked;
+        });
+        var lakesLayerToggle = document.getElementById("lakesLayer");
+        lakesLayerToggle.addEventListener("change", function () {
+          lakes.visible = lakesLayerToggle.checked;
+        });
+        var roadLayerToggle = document.getElementById("roadLayer");
+        roadLayerToggle.addEventListener("change", function () {
+          road.visible = roadLayerToggle.checked;
+        });
+        var jumindiLayerToggle = document.getElementById("jumindiLayer");
+        jumindiLayerToggle.addEventListener("change", function () {
+          jumindi.visible = jumindiLayerToggle.checked;
+        });
+         var boundaryLayerToggle = document.getElementById("boundaryLayer");
+        boundaryLayerToggle.addEventListener("change", function () {
+          boundary.visible = boundaryLayerToggle.checked;
+        });
+        
+        //查询缓冲
+        ///////////////////////
+                var wellBuffer, wellsGeometries;
+ 
+                var wellTypeSelect = document.getElementById("well-type");
+                var magSlider = document.getElementById("mag");
+                var distanceSlider = document.getElementById("distance");
+                var resultsLayer = new GraphicsLayer();
+                view.ui.add("infoDiv");
+ 
+                view.when(function () {
+                    return wellsLayer.when(function () {
+                        var query = wellsLayer.createQuery();
+                        console.log(wellsLayer.queryFeatures(query))
+                        return wellsLayer.queryFeatures(query);
+                    });
+                })
+                    .then(getValues)
+                    .then(getUniqueValues)
+                    .then(addToSelect)
+                    .then(createBuffer);
+ 
+            
+                function getValues(response) {
+                    var features = response.features;
+                    var values = features.map(function (feature) {
+                        return feature.attributes.Name;
+                    });
+                    console.log(values)
+                    console.log(values.length)
+                    return values;
+                }
+ 
+                //返回wellsLayer图层的Name属性字段的数组中的唯一值
+                function getUniqueValues(values) {
+                    var uniqueValues = [];
+                    values.forEach(function (item, i) {
+                        if ((uniqueValues.length < 1 || uniqueValues.indexOf(item) === -1) &&
+                            (item !== "")) {
+                            uniqueValues.push(item);
+                        }
+                    });
+                    console.log(uniqueValues)
+                    return uniqueValues;
+                }
+ 
+ 
+                function addToSelect(values) {
+                     var a=values.sort();
+                     console.log(a)
+                    values.forEach(function (value) {
+                        var option = document.createElement("option");
+                        option.text = value;
+                        wellTypeSelect.add(option);
+                    });
+                    console.log(wellTypeSelect.value)
+                    return setWellsDefinitionExpression(wellTypeSelect.value);
+                }
+ 
+                // 设置wells的定义表达式
+                function setWellsDefinitionExpression(newValue) {
+                    wellsLayer.definitionExpression = "Name = '" + newValue + "'";
+                    if (!wellsLayer.visible) {
+                        wellsLayer.visible = true;
+                    }
+                    return queryForWellGeometries();
+                }
+ 
+                function queryForWellGeometries() {
+                    var wellsQuery = wellsLayer.createQuery();
+ 
+                    return wellsLayer.queryFeatures(wellsQuery)
+                        .then(function (response) {
+                            wellsGeometries = response.features.map(function (feature) {
+                                return feature.geometry;
+                            });
+ 
+                            return wellsGeometries;
+                        });
+                }
+ 
+                function createBuffer(wellPoints) {
+                    console.log(wellPoints)
+                    var bufferDistance = parseInt(distanceSlider.value);
+                    var wellBuffers = geometryEngine.geodesicBuffer(wellPoints, [bufferDistance], "meters",
+                        true);
+                    console.log(wellBuffers)
+                    wellBuffer = wellBuffers[0];
+ 
+                   
+                    var bufferGraphic = new Graphic({
+                        geometry: wellBuffer,
+                        symbol: {
+                            type: "simple-fill", 
+                            outline: {
+                                width: 2,
+                                color: [255, 0, 0, 0.5]
+                            },
+                            style: "none"
+                        }
+                    });
+                    view.graphics.removeAll();
+                    view.graphics.add(bufferGraphic);
+                }
+               //distanceSlider绑定input事件
+                distanceSlider.addEventListener("input", function () {
+                    document.getElementById("distance-value").innerText = distanceSlider.value;
+                });
+                // 对查询的几何创建缓冲区
+                distanceSlider.addEventListener("change", function () {
+                    createBuffer(wellsGeometries);
+                });
+                
+                wellTypeSelect.addEventListener("change", function () {
+                    var type = event.target.value;
+                    
+                    setWellsDefinitionExpression(type)
+                        .then(createBuffer);
+                });
+
+//////////////////////
+
+});
+		
+	</script>
+	</head>
+
+	<body class="sassy-theme">
+		<div id="viewDiv"></div>
+		<div id="mapSwitch"></div>
+		<div id="mapSwitch1"></div>
+		<div id="id_div">
+			<p>
+				<a href="http://127.0.0.1:8020/last/query_yizhi.html?__hbt=1561103825454" target="_blank">查询遗址点</a>
+				<a href="http://127.0.0.1:8020/last/tour_route.html?__hbt=1561103790303" target="_blank">武汉5日游经典路线</a>
+			</p>
+		</div>
+  <span class="layerToggle0"><input type="checkbox" id="riversLayer">河流</span>
+  <span class="layerToggle1"><input type="checkbox" id="lakesLayer"> 湖泊</span>
+  <span class="layerToggle2"><input type="checkbox" id="roadLayer"> 道路</span>
+  <span class="layerToggle3"><input type="checkbox" id="jumindiLayer">居民地</span>
+  <span class="layerToggle4"><input type="checkbox" id="boundaryLayer">境界线</span>
+  <div id="infoDiv">
+    选择遗址:
+    <select id="well-type"></select>
+    <br> 遗址缓冲区距离:
+    <input id="distance" type="range" min="10" max="10000" step="10" value="800">&nbsp;
+    <span id="distance-value">10000</span> 米
+</div>
+ </body>
+
+</html>
